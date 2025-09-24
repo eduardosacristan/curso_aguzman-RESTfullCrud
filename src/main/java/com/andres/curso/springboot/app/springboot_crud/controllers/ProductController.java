@@ -1,11 +1,14 @@
 package com.andres.curso.springboot.app.springboot_crud.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.andres.curso.springboot.app.springboot_crud.entities.Product;
@@ -53,19 +56,31 @@ public class ProductController {
     }
 
     @PostMapping()
-    public ResponseEntity<Product> creaEntity(@Valid @RequestBody Product product) {
+    public ResponseEntity<?> creaEntity(@Valid @RequestBody Product product, BindingResult result) {
+        //Con la anotacion @Valid hacemos que acceda a las validaciones que hemos colocado en el Entity
+        //También se ha añadido el BindingResult. Ojo que el orden de los argumentos es importante
+        if(result.hasFieldErrors()) {
+            return validation(result);
+        }
         Product newProduct = productService.save(product);
         
         return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updaEntity(@PathVariable Integer id, @Valid @RequestBody Product product) {
+    public ResponseEntity<?> updaEntity(@Valid @RequestBody Product product, BindingResult result, @PathVariable Integer id) {
+        //Con la anotacion @Valid hacemos que acceda a las validaciones que hemos colocado en el Entity
+        //También se ha añadido el BindingResult. Ojo que el orden de los argumentos es importante
+        if(result.hasFieldErrors()) {
+            return validation(result);
+        }
         product.setId(id);
+
         Product newProduct = productService.save(product);
         
         return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
     }
+   
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
@@ -78,5 +93,13 @@ public class ProductController {
 
         return ResponseEntity.notFound().build();
     }
-    
+
+     private ResponseEntity<?> validation(BindingResult result) {
+        Map<String, String> errors = new HashMap<>();
+        result.getFieldErrors().forEach(err -> {
+            errors.put(err.getField(), "El campo " + err.getField()
+            + " " + err.getDefaultMessage());
+        });
+        return ResponseEntity.badRequest().body(errors);
+    }
 }
