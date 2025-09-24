@@ -38,10 +38,9 @@ public class ProductServiceImpl implements ProductService {
     public Optional<Product> delete(Product product) {
         Optional<Product> productOptional = productRespository.findById(product.getId());
         productOptional.ifPresent(prod -> {
-            productRespository.delete(product);
+            productRespository.delete(prod);
         });
 
         return productOptional;
-    }
-
+    }    
 }

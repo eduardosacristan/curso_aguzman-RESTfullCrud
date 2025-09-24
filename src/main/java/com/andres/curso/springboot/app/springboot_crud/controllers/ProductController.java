@@ -34,7 +34,7 @@ public class ProductController {
         this.productRepository = productRepository;
     }
 
-    @GetMapping("/")
+    @GetMapping()
     public List<Product> list() {
         return productService.findAll();
     }
@@ -50,7 +50,7 @@ public class ProductController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/")
+    @PostMapping()
     public ResponseEntity<Product> creaEntity(@RequestBody Product product) {
         Product newProduct = productService.save(product);
         
@@ -69,7 +69,7 @@ public class ProductController {
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         Optional<Product> productOptional = productService.fidById(id);
         if(productOptional.isPresent()) {
-            productRepository.delete(productOptional.get());
+           productRepository.delete(productOptional.get());
            
             return ResponseEntity.ok(productOptional.orElseThrow());
         }
