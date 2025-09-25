@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.andres.curso.springboot.app.springboot_crud.ProductValidator;
 import com.andres.curso.springboot.app.springboot_crud.entities.Product;
 import com.andres.curso.springboot.app.springboot_crud.repositories.ProductRepository;
 import com.andres.curso.springboot.app.springboot_crud.services.ProductService;
@@ -34,6 +35,9 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ProductValidator validator;
 
     ProductController(ProductRepository productRepository) {
         this.productRepository = productRepository;
@@ -59,6 +63,7 @@ public class ProductController {
     public ResponseEntity<?> creaEntity(@Valid @RequestBody Product product, BindingResult result) {
         //Con la anotacion @Valid hacemos que acceda a las validaciones que hemos colocado en el Entity
         //También se ha añadido el BindingResult. Ojo que el orden de los argumentos es importante
+        validator.validate(product, result);
         if(result.hasFieldErrors()) {
             return validation(result);
         }
@@ -71,6 +76,7 @@ public class ProductController {
     public ResponseEntity<?> updaEntity(@Valid @RequestBody Product product, BindingResult result, @PathVariable Integer id) {
         //Con la anotacion @Valid hacemos que acceda a las validaciones que hemos colocado en el Entity
         //También se ha añadido el BindingResult. Ojo que el orden de los argumentos es importante
+        validator.validate(product, result);
         if(result.hasFieldErrors()) {
             return validation(result);
         }
