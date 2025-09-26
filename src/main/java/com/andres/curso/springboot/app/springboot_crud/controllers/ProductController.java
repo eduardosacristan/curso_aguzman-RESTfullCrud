@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
-
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
@@ -47,12 +46,12 @@ public class ProductController {
     public List<Product> list() {
         return productService.findAll();
     }
-       
+
     @GetMapping("/{id}")
     public ResponseEntity<Product> view(@PathVariable Integer id) {
         Optional<Product> productOptional = productService.fidById(id);
 
-        if(productOptional.isPresent()) {
+        if (productOptional.isPresent()) {
             return ResponseEntity.ok(productOptional.orElseThrow());
         }
 
@@ -61,50 +60,54 @@ public class ProductController {
 
     @PostMapping()
     public ResponseEntity<?> creaEntity(@Valid @RequestBody Product product, BindingResult result) {
-        //Con la anotacion @Valid hacemos que acceda a las validaciones que hemos colocado en el Entity
-        //También se ha añadido el BindingResult. Ojo que el orden de los argumentos es importante
+        // Con la anotacion @Valid hacemos que acceda a las validaciones que hemos
+        // colocado en el Entity
+        // También se ha añadido el BindingResult. Ojo que el orden de los argumentos es
+        // importante
         validator.validate(product, result);
-        if(result.hasFieldErrors()) {
+        if (result.hasFieldErrors()) {
             return validation(result);
         }
         Product newProduct = productService.save(product);
-        
+
         return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updaEntity(@Valid @RequestBody Product product, BindingResult result, @PathVariable Integer id) {
-        //Con la anotacion @Valid hacemos que acceda a las validaciones que hemos colocado en el Entity
-        //También se ha añadido el BindingResult. Ojo que el orden de los argumentos es importante
+    public ResponseEntity<?> updaEntity(@Valid @RequestBody Product product, BindingResult result,
+            @PathVariable Integer id) {
+        // Con la anotacion @Valid hacemos que acceda a las validaciones que hemos
+        // colocado en el Entity
+        // También se ha añadido el BindingResult. Ojo que el orden de los argumentos es
+        // importante
         validator.validate(product, result);
-        if(result.hasFieldErrors()) {
+        if (result.hasFieldErrors()) {
             return validation(result);
         }
         product.setId(id);
 
         Product newProduct = productService.save(product);
-        
+
         return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
     }
-   
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         Optional<Product> productOptional = productService.fidById(id);
-        if(productOptional.isPresent()) {
-           productRepository.delete(productOptional.get());
-           
+        if (productOptional.isPresent()) {
+            productRepository.delete(productOptional.get());
+
             return ResponseEntity.ok(productOptional.orElseThrow());
         }
 
         return ResponseEntity.notFound().build();
     }
 
-     private ResponseEntity<?> validation(BindingResult result) {
+    private ResponseEntity<?> validation(BindingResult result) {
         Map<String, String> errors = new HashMap<>();
         result.getFieldErrors().forEach(err -> {
             errors.put(err.getField(), "El campo " + err.getField()
-            + " " + err.getDefaultMessage());
+                    + " " + err.getDefaultMessage());
         });
         return ResponseEntity.badRequest().body(errors);
     }
