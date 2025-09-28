@@ -1,4 +1,4 @@
-package com.andres.curso.springboot.app.springboot_crud.controllers;
+package com.andres.curso.springboot.app.springbootcrud.controllers;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,8 +11,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.andres.curso.springboot.app.springboot_crud.entities.User;
-import com.andres.curso.springboot.app.springboot_crud.services.UserService;
+import com.andres.curso.springboot.app.springbootcrud.entities.User;
+import com.andres.curso.springboot.app.springbootcrud.services.UserService;
 
 import jakarta.validation.Valid;
 

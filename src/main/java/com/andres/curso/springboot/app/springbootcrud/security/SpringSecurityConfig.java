@@ -1,4 +1,4 @@
-package com.andres.curso.springboot.app.springboot_crud.security;
+package com.andres.curso.springboot.app.springbootcrud.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

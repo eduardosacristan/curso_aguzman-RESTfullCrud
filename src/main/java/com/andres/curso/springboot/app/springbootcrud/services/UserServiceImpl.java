@@ -1,4 +1,4 @@
-package com.andres.curso.springboot.app.springboot_crud.services;
+package com.andres.curso.springboot.app.springbootcrud.services;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,10 +9,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.andres.curso.springboot.app.springboot_crud.entities.Role;
-import com.andres.curso.springboot.app.springboot_crud.entities.User;
-import com.andres.curso.springboot.app.springboot_crud.repositories.RoleRepository;
-import com.andres.curso.springboot.app.springboot_crud.repositories.UserRespository;
+import com.andres.curso.springboot.app.springbootcrud.entities.Role;
+import com.andres.curso.springboot.app.springbootcrud.entities.User;
+import com.andres.curso.springboot.app.springbootcrud.repositories.RoleRepository;
+import com.andres.curso.springboot.app.springbootcrud.repositories.UserRespository;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -54,6 +54,11 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoded);
         
         return userRespository.save(user);
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return userRespository.existsByUsername(username);
     }
 
 }
