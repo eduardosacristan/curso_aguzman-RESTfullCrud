@@ -1,4 +1,4 @@
-package com.andres.curso.springboot.app.springbootcrud.validation;
+package com.andres.curso.springboot.app.springboot_crud.validation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,7 +12,9 @@ import jakarta.validation.Payload;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ExistsByUsername {
-    String message() default "Ya existe en la base de datos";
+    String message() default "ya existe en la base de datos!, escoja otro username!";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

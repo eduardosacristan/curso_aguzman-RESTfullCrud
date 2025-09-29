@@ -1,9 +1,9 @@
-package com.andres.curso.springboot.app.springbootcrud.entities;
+package com.andres.curso.springboot.app.springboot_crud.entities;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.andres.curso.springboot.app.springbootcrud.validation.ExistsByUsername;
+import com.andres.curso.springboot.app.springboot_crud.validation.ExistsByUsername;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -31,54 +31,39 @@ public class User {
     private Long id;
 
     @ExistsByUsername
-    @Column(unique = true)
     @NotBlank
     @Size(min = 4, max = 12)
+    @Column(unique = true)
     private String username;
 
-    @NotBlank   
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) //Así no aparece en el GET
+    @NotBlank
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @JsonIgnoreProperties({"users"}) //con esta etiqueta evitamos la recursividad a cargar los Roles al ser una relacion maytomany bidireccional
+    @JsonIgnoreProperties({"users", "handler", "hibernateLazyInitializer"})
     @ManyToMany
     @JoinTable(
-        name = "users_roles", 
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "rol_id")
-        , uniqueConstraints = { @UniqueConstraint(columnNames =  {"user_id", "rol_id"})}
-        )
+        name = "users_roles",
+        joinColumns = @JoinColumn(name="user_id"),
+        inverseJoinColumns = @JoinColumn(name="role_id"),
+        uniqueConstraints = { @UniqueConstraint(columnNames = {"user_id", "role_id"})}
+    )
     private List<Role> roles;
 
-    @Transient //Para indicar que este campo no está mapeado de la base de datos.
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) //Así no aparece en el GET
-    private boolean admin;
-   
-    private boolean enabled;
     
-    @PrePersist
-    public void PrePersist() {
-        enabled = true;
-    }
-
     public User() {
         roles = new ArrayList<>();
     }
 
-    public boolean isEnabled() {
-        return enabled;
-    }
+    private boolean enabled;
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
+    @Transient
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private boolean admin;
 
-    public boolean isAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(boolean admin) {
-        this.admin = admin;
+    @PrePersist
+    public void prePersist() {
+        enabled = true;
     }
 
     public Long getId() {
@@ -111,6 +96,22 @@ public class User {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     @Override

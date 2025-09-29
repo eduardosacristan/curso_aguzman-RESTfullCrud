@@ -1,9 +1,9 @@
-package com.andres.curso.springboot.app.springbootcrud.validation;
+package com.andres.curso.springboot.app.springboot_crud.validation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.andres.curso.springboot.app.springbootcrud.services.UserService;
+import com.andres.curso.springboot.app.springboot_crud.services.UserService;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

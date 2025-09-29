@@ -1,4 +1,4 @@
-package com.andres.curso.springboot.app.springbootcrud.services;
+package com.andres.curso.springboot.app.springboot_crud.services;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,16 +9,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.andres.curso.springboot.app.springbootcrud.entities.Role;
-import com.andres.curso.springboot.app.springbootcrud.entities.User;
-import com.andres.curso.springboot.app.springbootcrud.repositories.RoleRepository;
-import com.andres.curso.springboot.app.springbootcrud.repositories.UserRespository;
+import com.andres.curso.springboot.app.springboot_crud.entities.Role;
+import com.andres.curso.springboot.app.springboot_crud.entities.User;
+import com.andres.curso.springboot.app.springboot_crud.repositories.RoleRepository;
+import com.andres.curso.springboot.app.springboot_crud.repositories.UserRepository;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService{
 
     @Autowired
-    private UserRespository userRespository;
+    private UserRepository repository;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public List<User> findAll() {
-        return (List<User>)userRespository.findAll();
+        return (List<User>) repository.findAll();
     }
 
     @Override
@@ -39,26 +39,21 @@ public class UserServiceImpl implements UserService {
         Optional<Role> optionalRoleUser = roleRepository.findByName("ROLE_USER");
         List<Role> roles = new ArrayList<>();
 
-        optionalRoleUser.ifPresent(role -> {
-            roles.add(role);
-        });
+        optionalRoleUser.ifPresent(roles::add);
 
-        if(user.isAdmin()) {
+        if (user.isAdmin()) {
             Optional<Role> optionalRoleAdmin = roleRepository.findByName("ROLE_ADMIN");
-            optionalRoleAdmin.ifPresent(role ->  {
-                roles.add(role);
-            });
+            optionalRoleAdmin.ifPresent(roles::add);
         }
+
         user.setRoles(roles);
-        String passwordEncoded = passwordEncoder.encode(user.getPassword());
-        user.setPassword(passwordEncoded);
-        
-        return userRespository.save(user);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return repository.save(user);
     }
 
     @Override
     public boolean existsByUsername(String username) {
-        return userRespository.existsByUsername(username);
+        return repository.existsByUsername(username);
     }
-
+    
 }
