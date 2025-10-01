@@ -1,9 +1,6 @@
 package com.andres.curso.springboot.app.springboot_crud.security.filter;
 
-import static com.andres.curso.springboot.app.springboot_crud.security.filter.TokenJWTConfig.CONTENT_TYPE;
-import static com.andres.curso.springboot.app.springboot_crud.security.filter.TokenJWTConfig.HEADER_AUTHORIZATION;
-import static com.andres.curso.springboot.app.springboot_crud.security.filter.TokenJWTConfig.PREFIX_TOKEN;
-import static com.andres.curso.springboot.app.springboot_crud.security.filter.TokenJWTConfig.SECRET_KEY;
+import static com.andres.curso.springboot.app.springboot_crud.security.filter.TokenJWTConfig.*;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -19,17 +16,16 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 import com.andres.curso.springboot.app.springboot_crud.security.SimpleGrantedAuthorityJsonCreator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class JwtValidationFilter extends BasicAuthenticationFilter {
 
